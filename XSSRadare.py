@@ -144,7 +144,7 @@ def print_positive_scan(url, params):
 
 
 def print_negative_scan(url_to_scan):
-    unqouted_url = urllib3.unquote(url_to_scan).decode('utf8')
+    unqouted_url = urllib.parse.unquote(url_to_scan)#.decode('utf8')
     message = "[-]No XSS %s" % unqouted_url
     cprint(message, "red")
 

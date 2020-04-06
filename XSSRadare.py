@@ -45,7 +45,7 @@ arparser.add_argument(
 )
 
 arparser.add_argument(
-    "-f", "--full", required=False, help="use 666 payloads", action='store_true'
+    "-f", "--full", required=False, help="use XSS-Cheat-Sheet-PortSwigger payloads", action='store_true'
 )
 
 arparser.add_argument(
@@ -53,7 +53,6 @@ arparser.add_argument(
 )
 
 parser = vars(arparser.parse_args())
-
 
 
 # global vars to control the options
@@ -94,14 +93,15 @@ def shutdown_display():
     display = Display(visible=0, size=(800, 600))
     display.start()
 
+
 if user_view == "off":
     shutdown_display()
 
 
 def get_payloads():
     if full:
-        payload_file = open("666_lines_of_XSS_vectors.html", "r")
-        print("Using payloads from file 666_lines_of_XSS_vectors.html")
+        payload_file = open("XSS-Cheat-Sheet-PortSwigger.txt", "r")
+        print("Using payloads from file XSS-Cheat-Sheet-PortSwigger.txt")
     else:
         payload_file = open("payloads.txt", "r")
         print("Using payloads from file payloads.txt")
@@ -138,13 +138,13 @@ def encode_url(url, params):
 
 
 def print_positive_scan(url, params):
-    unqouted_params = urllib.parse.unquote(params)#.decode('utf8')
+    unqouted_params = urllib.parse.unquote(params)  # .decode('utf8')
     message = "[+] XSS Found on %s with params %s" % (url, unqouted_params)
     cprint(message, "green")
 
 
 def print_negative_scan(url_to_scan):
-    unqouted_url = urllib.parse.unquote(url_to_scan)#.decode('utf8')
+    unqouted_url = urllib.parse.unquote(url_to_scan)  # .decode('utf8')
     message = "[-]No XSS %s" % unqouted_url
     cprint(message, "red")
 
@@ -158,16 +158,20 @@ def print_negative(text):
     message = "[!] %s" % text
     cprint(message, "red")
 
+
 def print_scan_finish(xssnum):
     message = "[+] Scan finished , number of found XSS : %i " % xssnum
     cprint(message, "blue")
+
+
 def fuzz_get_urls(url):
     if cookies_option is not None:
         cookies = cookies_option.split(":")
         cookies_name = cookies[0]
-        cookies_value= cookies[1]
+        cookies_value = cookies[1]
         cookies_path = cookies[2]
-        cookie_dict = {'name': cookies_name, 'value': cookies_value, 'path': cookies_path}
+        cookie_dict = {'name': cookies_name,
+                       'value': cookies_value, 'path': cookies_path}
     number_of_found_xss = 0
     scan_url = get_url(url)
     params = decode_url(url)
@@ -204,6 +208,7 @@ def fuzz_get_urls(url):
             params[param] = previous_value
     print_scan_finish(number_of_found_xss)
 
+
 def fuzz_urls_file(fi):
     if os.path.isfile(fi):
         urls_file_raw = open(fi, "r")
@@ -213,6 +218,7 @@ def fuzz_urls_file(fi):
 
     else:
         print_negative("URLs file is not exist")
+
 
 if scan_type == "url":
     fuzz_get_urls(url)
